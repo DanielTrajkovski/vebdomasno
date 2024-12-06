@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Booking - Confirmation</title>
+    <style type="text/css">
+        body {
+            width: 800px;
+            margin: auto;
+        }
+        table {
+            width:100%;
+        }
+        table, td, th {
+            border: 1px solid black;
+            padding: 3px 2px;
+        }
+    </style>
+</head>
+<body>
+<section>
+
+    <header><div th:if="${hasError}" class="error">
+        <h1> <div style="color: red; align-content: center" th:text="${error}"></div></h1>
+    </div></header>
+
+    <div th:if="${toprint}" class="error">
+        <header>
+            <h1>Event Booking page - Booking confirmation </h1>
+        </header>
+
+
+        <table>
+
+            <tr>
+                <th colspan="2">
+                    Your Booking Status
+                </th>
+            </tr>
+            <tr>
+                <td><b>Attendee Name </b></td>
+                <td> <span th:text="${attendeeName}"></span></td>
+            </tr>
+            <tr>
+                <td><b>Client IP Address</b></td>
+                <td><span th:text="${attendeeAddress}"></span></td>
+            </tr>
+            <tr>
+                <td><b>Booking for Event</b></td>
+                <td><span th:text="${event}"></span></td>
+            </tr>
+            <tr>
+                <td><b>Number of tickets</b></td>
+                <td><span th:text="${numTickets}"></span></td>
+            </tr>
+        </table>
+    </div>
+
+</section>
+</body>
+</html>
+
+</body>
+</html>
