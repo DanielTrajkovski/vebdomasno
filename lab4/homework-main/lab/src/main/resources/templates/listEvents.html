@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html xmlns:sec="">
+<head>
+    <meta charset="utf-8">
+    <title>Event Booking page - Welcome and choose an Event</title>
+    <style type="text/css">
+        body {
+            width: 800px;
+            margin: auto;
+        }
+        .event-item {
+            margin: 10px 0;
+            padding: 10px;
+            border: 4px solid #ddd;
+            border-radius: 4px;
+        }
+        .event-actions {
+            margin-top: 5px;
+        }
+        .event-actions form {
+            display: inline-block;
+            margin-right: 10px;
+        }
+        .booking-section {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <h1>Welcome to our Event Booking App</h1>
+    <div  sec:authorize="isAuthenticated()">
+        <a class="logout-btn" href="/login/logout">
+            Logout
+        </a>
+    </div>
+</header>
+<main>
+    <h2>Search Events:</h2>
+    <form action="/events" method="get">
+        <label>
+            Event Name:
+            <input type="text" name="searchText"/><br/>
+        </label>
+        <label>
+            Minimum Rating:
+            <input type="number" name="minRating"/><br/>
+        </label>
+        <label>Location</label>
+        <select name="location" class="form-control">
+            <option value="" > </option>
+            <option th:each="loc : ${location}" th:value="${loc.id}" th:text="${loc.name}"></option>
+        </select>
+        <input type="submit" value="Search">
+    </form>
+
+    <h2>Choose an event:</h2>
+    <div th:each="event : ${events}" class="event-item">
+        <label>
+            <input type="radio" name="eventName" th:value="${event.name}" form="bookingForm" required/>
+            Name: <span th:text="${event.name}"></span>,
+            Description: <span th:text="${event.description}"></span>,
+            Rating: <span th:text="${event.popularityScore}"></span>,
+            Location: <span th:text="${event.location.getName()}"></span>
+        </label>
+        <th:block sec:authorize="hasRole('ROLE_ADMIN')">
+        <div class="event-actions">
+            <form th:action="@{'/events/delete/{id}' (id=${event.id})}" method="post">
+                <button type="submit">Delete</button>
+            </form>
+            <a th:href="@{'/events/edit/{eventId}' (eventId=${event.id})}" class="button">Edit</a>
+
+        </div>
+        </th:block>
+    </div>
+<th:block sec:authorize="hasRole('ROLE_ADMIN')">
+    <div>
+        <a th:href="@{/events/add-form}" class="button">Add Event</a>
+    </div>
+</th:block>
+
+    <form id="bookingForm" th:action="@{/eventBooking/confirmation}" method="post" class="booking-section">
+        <h2>Enter your Name:</h2>
+        <label>
+            Name:
+            <input type="text" name="attendeeName" required>
+        </label>
+        <br/>
+
+        <h2>Choose number of tickets:</h2>
+        <label>
+            Number of tickets:
+            <input type="number" name="numTickets" min="1" max="10" required>
+        </label>
+        <br/><br/>
+
+        <input type="submit" value="Submit">
+    </form>
+</main>
+</body>
+</html>
